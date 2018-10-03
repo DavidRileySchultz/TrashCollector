@@ -41,9 +41,13 @@ namespace TrashCollector2.Controllers
         public ActionResult Details(int? id)
         {
             AddressViewModel addressViewModel = new AddressViewModel();
+            Customer customer = null;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var FoundUserId = User.Identity.GetUserId();
+
+                customer = db.Customer.Where(c => c.ApplicationUserId == FoundUserId).FirstOrDefault();
+                return View(customer);
             }
             addressViewModel.customer = db.Customer.Find(id);
             addressViewModel.address = db.Address.Find(addressViewModel.customer.AddressID);
