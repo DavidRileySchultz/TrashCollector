@@ -1,0 +1,69 @@
+﻿@model IEnumerable<TrashCollector2.Models.PickUps>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PickCustomerId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DayOfWeek)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PickUpDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Zipcode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SuspendPickUpStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SuspendPickUpEnd)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PickCustomerId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DayOfWeek)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PickUpDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Zipcode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SuspendPickUpStart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SuspendPickUpEnd)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.PickUpId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.PickUpId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.PickUpId })
+        </td>
+    </tr>
+}
+
+</table>

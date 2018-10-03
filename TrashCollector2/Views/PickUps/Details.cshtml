@@ -1,0 +1,74 @@
+﻿@model TrashCollector2.Models.PickUps
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PickUps</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PickCustomerId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PickCustomerId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DayOfWeek)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DayOfWeek)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PickUpDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PickUpDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Zipcode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Zipcode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SuspendPickUpStart)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SuspendPickUpStart)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SuspendPickUpEnd)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SuspendPickUpEnd)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PickUpId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

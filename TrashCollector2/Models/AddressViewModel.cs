@@ -7,7 +7,9 @@ namespace TrashCollector2.Models
 {
     public class AddressViewModel
     {
-        Customer customer { get; set; }
-        Address address { get; set; }
+        public Employee Employee { get; set; }
+        public Customer Customer { get; set; }
+        public Address Address { get; set; }
+        public PickUps PickUps { get; set; }
     }
 }

@@ -21,7 +21,12 @@ namespace TrashCollector2.Models
         [Display(Name = "Address")]
         public int AddressID { get; set; }
         public Address Address { get; set; }
-        public string PickUpDay { get; set; }
+        
+        [ForeignKey("PickUps")]
+        public int PickId { get; set; }
+        public PickUps PickUps { get; set; }
+        public string UserName { get; set; }
+        public double AccountBalance { get; set; }
 
 
         [ForeignKey("ApplicationUser")]

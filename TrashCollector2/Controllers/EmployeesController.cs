@@ -127,12 +127,12 @@ namespace TrashCollector2.Controllers
         {
             return View(customer);
         }
-        //public ActionResult PickUps(int id)
-        //{
-        //    var employeeZipCode = db.Employees.Where(e => e.ID == id).Select(e => e.ZipCode).First();
-        //    var customersInZipCode = db.Customers.Where(c => c.Address.ZipCode == employeeZipCode);
-        //    return View("Index", customersInZipCode);
-        //}
+        public ActionResult PickUps(int id)
+        {
+            var employeeZipCode = db.Employee.Where(e => e.ID == id).Select(e => e.ZipCode).First();
+            var customersInZipCode = db.Customer.Where(c => c.Address.Zipcode == employeeZipCode);
+            return View("Index", customersInZipCode);
+        }
         public ActionResult ConfirmPickUps()
         {
             return View("PickUps");
