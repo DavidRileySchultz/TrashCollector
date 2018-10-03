@@ -123,5 +123,19 @@ namespace TrashCollector2.Controllers
             }
             base.Dispose(disposing);
         }
+        public ActionResult PickUp(Customer customer)
+        {
+            return View(customer);
+        }
+        //public ActionResult PickUps(int id)
+        //{
+        //    var employeeZipCode = db.Employees.Where(e => e.ID == id).Select(e => e.ZipCode).First();
+        //    var customersInZipCode = db.Customers.Where(c => c.Address.ZipCode == employeeZipCode);
+        //    return View("Index", customersInZipCode);
+        //}
+        public ActionResult ConfirmPickUps()
+        {
+            return View("PickUps");
+        }
     }
 }

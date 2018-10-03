@@ -17,7 +17,12 @@ namespace TrashCollector2.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-            return View(db.Customer.ToList());
+            var customers = db.Customer.Include(c => c.Address);
+            return View(customers.ToList());
+        }
+        public ActionResult PickUp()
+        {
+            return RedirectToAction("Index");
         }
 
         // GET: Customers/Details/5
@@ -46,11 +51,11 @@ namespace TrashCollector2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,FirstName,LastName,Email")] Customer customer)
+        public ActionResult Create(AddressViewModel model)
         {
             if (ModelState.IsValid)
             {
-                db.Customer.Add(customer);
+                db.Customer.Add(model.customer);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
