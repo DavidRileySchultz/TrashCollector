@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -39,22 +40,31 @@ namespace TrashCollector2.Controllers
         // GET: Customers/Details/5
         public ActionResult Details(int? id)
         {
+            AddressViewModel addressViewModel = new AddressViewModel();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customer.Find(id);
-            if (customer == null)
+            addressViewModel.customer = db.Customer.Find(id);
+            addressViewModel.address = db.Address.Find(addressViewModel.customer.AddressID);
+            addressViewModel.pickUps = db.PickUps.Where(c => c.PickUpId == addressViewModel.customer.PickId).Single();
+            if (addressViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            return View(addressViewModel);
         }
 
         // GET: Customers/Create
+        [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            AddressViewModel addressViewModel = new AddressViewModel()
+            {
+                address = new Address(),
+                customer = new Customer()
+            };
+            return View(addressViewModel);
         }
 
         // POST: Customers/Create
@@ -62,31 +72,43 @@ namespace TrashCollector2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Zipcode,State,City,Address,Balance")] Customer customer)
+        public ActionResult Create(AddressViewModel addressViewModel, string DayOfWeek)
         {
+            addressViewModel.pickUps = new PickUps();
+            addressViewModel.pickUps.DayOfWeek = DayOfWeek;
+            addressViewModel.pickUps.Zipcode = addressViewModel.address.Zipcode;
+            addressViewModel.pickUps.PickCustomerId = addressViewModel.customer.ID;
+            addressViewModel.address.ID = addressViewModel.customer.ID;
+            addressViewModel.pickUps.Cost = 50;
+            addressViewModel.customer.UserName = User.Identity.Name;
+            addressViewModel.customer.Email = db.Users.Where(e => e.UserName == addressViewModel.customer.UserName).Select(e => e.Email).ToString();
             if (ModelState.IsValid)
             {
-                db.Customer.Add(customer);
+                db.Customer.Add(addressViewModel.customer);
+                db.Address.Add(addressViewModel.address);
+                db.PickUps.Add(addressViewModel.pickUps);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Customers");
             }
 
-            return View(customer);
+            return View(addressViewModel.customer);
         }
 
         // GET: Customers/Edit/5
         public ActionResult Edit(int? id)
         {
+            AddressViewModel addressViewModel = new AddressViewModel();
             if (id == null)
             {
                 return RedirectToAction("Create");
             }
-            Customer customer = db.Customer.Find(id);
-            if (customer == null)
+            addressViewModel.customer = db.Customer.Find(id);
+            addressViewModel.address = db.Address.Find(addressViewModel.customer.AddressID);
+            if (addressViewModel.customer == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            return View(addressViewModel.customer);
         }
 
         // POST: Customers/Edit/5

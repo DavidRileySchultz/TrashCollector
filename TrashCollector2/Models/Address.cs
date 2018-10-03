@@ -10,15 +10,15 @@ namespace TrashCollector2.Models
     {
         [Key]
         public int ID { get; set; }
-        [Display(Name = "Address 1")]
+        [Display(Name = "Street Address")]
         public string Address1 { get; set; }
-        [Display(Name = "Address 2")]
+        [Display(Name = "Apt/Suite Number")]
         public string Address2 { get; set; }
         [Display(Name = "City")]
         public string City { get; set; }
         [Display(Name = "State")]
         public string State { get; set; }
         [Display(Name = "Zip Code")]
-        public int Zipcode { get; set; }
+        public string Zipcode { get; set; }
     }
 }

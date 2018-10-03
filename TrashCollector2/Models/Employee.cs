@@ -17,7 +17,7 @@ namespace TrashCollector2.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         [Display(Name = "Zip Code")]
-        public int ZipCode { get; set; }
+        public string ZipCode { get; set; }
 
         [ForeignKey("ApplicationUser")]
         public string ApplicationUserId { get; set; }
