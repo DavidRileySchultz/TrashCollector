@@ -106,10 +106,8 @@
         </dd>
     </dl>
 </div>
-<div>Would you like to schedule an additional pick-up?</div>
-<div>@Html.ActionLink("Add Pick Up", "Create", "PickUps")</div>
-<div>Would you like to suspend your pick-ups?</div>
-<div>@Html.ActionLink("Suspend", "SuspendPickUps", "Customers")</div>
+<div>Would you like to suspend service or add an additional pick-up?</div>
+<div>@Html.ActionLink("Amend Services", "Create", "PickUps")</div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.customer.ID }) |
     @Html.ActionLink("Back to List", "Index")

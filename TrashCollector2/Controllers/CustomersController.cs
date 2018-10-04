@@ -40,14 +40,15 @@ namespace TrashCollector2.Controllers
         // GET: Customers/Details/5
         public ActionResult Details(int? id)
         {
-            AddressViewModel addressViewModel = new AddressViewModel();
-            Customer customer = null;
+            AddressViewModel addressViewModel = new AddressViewModel();            
             if (id == null)
             {
                 var FoundUserId = User.Identity.GetUserId();
 
-                customer = db.Customer.Where(c => c.ApplicationUserId == FoundUserId).FirstOrDefault();
-                return View(customer);
+                addressViewModel.customer = db.Customer.Where(c => c.ApplicationUserId == FoundUserId).FirstOrDefault();
+                addressViewModel.address = db.Address.Find(addressViewModel.customer.AddressID);
+                addressViewModel.pickUps = db.PickUps.Where(c => c.PickUpId == addressViewModel.customer.PickId).Single();
+                return View(addressViewModel);
             }
             addressViewModel.customer = db.Customer.Find(id);
             addressViewModel.address = db.Address.Find(addressViewModel.customer.AddressID);
@@ -82,12 +83,13 @@ namespace TrashCollector2.Controllers
             addressViewModel.pickUps.DayOfWeek = DayOfWeek;
             addressViewModel.pickUps.Zipcode = addressViewModel.address.Zipcode;
             addressViewModel.pickUps.PickCustomerId = addressViewModel.customer.ID;
-            addressViewModel.address.ID = addressViewModel.customer.ID;
+            // addressViewModel.address.ID = addressViewModel.customer.ID;
             addressViewModel.pickUps.Cost = 50;
             addressViewModel.customer.UserName = User.Identity.Name;
-            addressViewModel.customer.Email = db.Users.Where(e => e.UserName == addressViewModel.customer.UserName).Select(e => e.Email).ToString();
+            addressViewModel.customer.Email = User.Identity.Name;
             if (ModelState.IsValid)
             {
+                addressViewModel.customer.ApplicationUserId = User.Identity.GetUserId();
                 db.Customer.Add(addressViewModel.customer);
                 db.Address.Add(addressViewModel.address);
                 db.PickUps.Add(addressViewModel.pickUps);

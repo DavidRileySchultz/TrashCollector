@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -15,9 +16,11 @@ namespace TrashCollector2.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Employees
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
-            return View(db.Employee.ToList());
+            var employeeZipCode = db.Employee.Where(e => e.ID == id).Select(e => e.ZipCode).First();
+            var customersInZipCode = db.Customer.Where(c => c.Address.Zipcode == employeeZipCode);
+            return View(customersInZipCode);
         }
 
         // GET: Employees/Details/5
@@ -50,6 +53,7 @@ namespace TrashCollector2.Controllers
         {
             if (ModelState.IsValid)
             {
+                employee.ApplicationUserId = User.Identity.GetUserId();
                 db.Employee.Add(employee);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -127,15 +131,15 @@ namespace TrashCollector2.Controllers
         {
             return View(customer);
         }
-        public ActionResult PickUps(int id)
-        {
-            var employeeZipCode = db.Employee.Where(e => e.ID == id).Select(e => e.ZipCode).First();
-            var customersInZipCode = db.Customer.Where(c => c.Address.Zipcode == employeeZipCode);
-            return View("Index", customersInZipCode);
-        }
-        public ActionResult ConfirmPickUps()
-        {
-            return View("PickUps");
-        }
+        //public ActionResult PickUps(int id)
+        //{
+        //    var employeeZipCode = db.Employee.Where(e => e.ID == id).Select(e => e.ZipCode).First();
+        //    var customersInZipCode = db.Customer.Where(c => c.Address.Zipcode == employeeZipCode);
+        //    return View("Index", customersInZipCode);
+        //}
+        //public ActionResult ConfirmPickUps()
+        //{
+        //    return View("PickUps");
+        //}
     }
 }
