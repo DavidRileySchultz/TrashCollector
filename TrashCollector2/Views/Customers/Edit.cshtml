@@ -43,6 +43,8 @@ new ListItem { Text = "Sunday", Value= "Sunday" }
 
     @Html.HiddenFor(model => model.customer.PickId)
 
+    @Html.HiddenFor(model => model.customer.UserName)
+
     <div class="form-group">
         @Html.LabelFor(model => model.customer.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">

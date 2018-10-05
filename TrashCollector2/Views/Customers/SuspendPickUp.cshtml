@@ -1,6 +1,6 @@
-﻿@model TrashCollector2.Models.PickUps
+﻿@model TrashCollector2.Models.Customer
 @{
-    ViewBag.Title = "SuspendPickUps";
+    ViewBag.Title = "SuspendPickUp";
 }
 
 <h2>SuspendPickUp</h2>
@@ -76,7 +76,7 @@ new ListItem { Text = "30", Value= "30"}
             </div>
         </div>
         <div class="form-group">
-            @Html.Label("Start Of Suspend", new { @class = "col-md-2 control-label" })
+            @Html.Label("End Of Suspend", new { @class = "col-md-2 control-label" })
             <div class="col-md-1">
                 @Html.DropDownList("EndMonth", new SelectList(listItems, "Value", "Text"))
             </div>
@@ -87,7 +87,7 @@ new ListItem { Text = "30", Value= "30"}
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="SuspendPickUps" class="btn btn-default" />
+                <input type="submit" value="SuspendPickUp" class="btn btn-default" />
             </div>
         </div>
     </div>

@@ -63,14 +63,14 @@ namespace TrashCollector2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(PickUps pickUps, string Month, string Date, string DayOfWeek)
         {
-            var customer = db.Customer.Where(c => c.UserName == User.Identity.Name).SingleOrDefault();
+            Customer customer = db.Customer.Where(c => c.UserName == User.Identity.Name).SingleOrDefault();
             var pickup = db.PickUps.Where(p => p.PickUpId == customer.PickId).Single();
             pickup.PickUpDate = new DateTime(2018, int.Parse(Month), int.Parse(Date));
             pickup.Cost += 50;
             if (ModelState.IsValid)
             {
                 db.SaveChanges();
-                return RedirectToAction("Details", "Customers", new { id = customer.ID });
+                return RedirectToAction("Details", "Customers");
             }
 
             return View(pickUps);

@@ -106,8 +106,8 @@
 <div>Would you like to add an additional pick-up?</div>
 <div>@Html.ActionLink("Additional Pick Up", "Create", "PickUps")</div>
 <div>Would you like to suspend your pick-ups?</div>
-<div>@Html.ActionLink("Suspend Service", "SuspendPickUps", "Customers")</div>
+<div>@Html.ActionLink("Suspend Service", "SuspendPickUp", "Customers")</div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.customer.ID })|
+    @Html.ActionLink("Edit", "Edit")
     @Html.ActionLink("Back to List", "Details")
 </p>

@@ -29,12 +29,12 @@ namespace TrashCollector2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SuspendPickUp(string StartMonth, string StartDate, string EndMonth, string EndDate)
         {
-            var customer = db.Customer.Where(c => c.UserName == User.Identity.Name).Single();
+            Customer customer = db.Customer.Where(c => c.UserName == User.Identity.Name).Single();
             var pickup = db.PickUps.Where(p => p.PickUpId == customer.PickId).Single();
             pickup.SuspendPickUpStart = new DateTime(2018, int.Parse(StartMonth), int.Parse(StartDate));
             pickup.SuspendPickUpEnd = new DateTime(2018, int.Parse(EndMonth), int.Parse(EndDate));
             db.SaveChanges();
-            return RedirectToAction("Details", "Customers", new { id = customer.ID });
+            return RedirectToAction("Details", "Customers");
         }
 
         // GET: Customers/Details/5
