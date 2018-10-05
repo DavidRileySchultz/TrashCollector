@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -17,7 +18,21 @@ namespace TrashCollector2.Controllers
         // GET: PickUps
         public ActionResult Index()
         {
-            return View(db.PickUps.ToList());
+            Employee employee = db.Employee.Where(e => e.Email == User.Identity.Name).Single();
+            var pickUp = db.PickUps.Select(p => p.PickUpId).Distinct().ToList();
+            var pickUps = db.Customer.Include(p => p.Address).Include(p => p.PickUps).Where(p => pickUp.Contains(p.PickId)).ToList();
+            var customersInZip = pickUps.Where(p => p.Address.Zipcode == employee.ZipCode);
+            return View(customersInZip);
+        }
+
+        [HttpPost]
+        public ActionResult Index(string filterDay)
+        {
+            Employee employee = db.Employee.Where(e => e.Email == User.Identity.Name).Single();
+            var pickUp = db.PickUps.Select(p => p.PickUpId).Distinct().ToList();
+            var pickUps = db.Customer.Include(p => p.Address).Include(p => p.PickUps).Where(p => pickUp.Contains(p.PickId)).ToList();
+            var customersInZip = pickUps.Where(p => p.Address.Zipcode == employee.ZipCode && p.PickUps.DayOfWeek == filterDay);
+            return View(customersInZip);
         }
 
         // GET: PickUps/Details/5
@@ -46,13 +61,16 @@ namespace TrashCollector2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PickUpId,PickCustomerId,DayOfWeek,PickUpDate,Cost,Zipcode,SuspendPickUpStart,SuspendPickUpEnd")] PickUps pickUps)
+        public ActionResult Create(PickUps pickUps, string Month, string Date, string DayOfWeek)
         {
+            var customer = db.Customer.Where(c => c.UserName == User.Identity.Name).SingleOrDefault();
+            var pickup = db.PickUps.Where(p => p.PickUpId == customer.PickId).Single();
+            pickup.PickUpDate = new DateTime(2018, int.Parse(Month), int.Parse(Date));
+            pickup.Cost += 50;
             if (ModelState.IsValid)
             {
-                db.PickUps.Add(pickUps);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Customers", new { id = customer.ID });
             }
 
             return View(pickUps);
@@ -110,7 +128,10 @@ namespace TrashCollector2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             PickUps pickUps = db.PickUps.Find(id);
-            db.PickUps.Remove(pickUps);
+            Customer customer = db.Customer.Where(c => c.PickId == pickUps.PickUpId).Single();
+            customer.AccountBalance = pickUps.Cost;
+            pickUps.Cost = 50;
+            pickUps.PickUpDate = null;
             db.SaveChanges();
             return RedirectToAction("Index");
         }

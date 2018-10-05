@@ -56,21 +56,18 @@
         <dt>
             @Html.DisplayNameFor(model => model.address.City)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.address.City)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.address.State)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.address.State)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.address.Zipcode)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.address.Zipcode)
         </dd>
@@ -106,9 +103,11 @@
         </dd>
     </dl>
 </div>
-<div>Would you like to suspend service or add an additional pick-up?</div>
-<div>@Html.ActionLink("Amend Services", "Create", "PickUps")</div>
+<div>Would you like to add an additional pick-up?</div>
+<div>@Html.ActionLink("Additional Pick Up", "Create", "PickUps")</div>
+<div>Would you like to suspend your pick-ups?</div>
+<div>@Html.ActionLink("Suspend Service", "SuspendPickUps", "Customers")</div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.customer.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", new { id = Model.customer.ID })|
+    @Html.ActionLink("Back to List", "Details")
 </p>

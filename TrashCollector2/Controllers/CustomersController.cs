@@ -50,9 +50,6 @@ namespace TrashCollector2.Controllers
                 addressViewModel.pickUps = db.PickUps.Where(c => c.PickUpId == addressViewModel.customer.PickId).Single();
                 return View(addressViewModel);
             }
-            addressViewModel.customer = db.Customer.Find(id);
-            addressViewModel.address = db.Address.Find(addressViewModel.customer.AddressID);
-            addressViewModel.pickUps = db.PickUps.Where(c => c.PickUpId == addressViewModel.customer.PickId).Single();
             if (addressViewModel == null)
             {
                 return HttpNotFound();
@@ -83,7 +80,6 @@ namespace TrashCollector2.Controllers
             addressViewModel.pickUps.DayOfWeek = DayOfWeek;
             addressViewModel.pickUps.Zipcode = addressViewModel.address.Zipcode;
             addressViewModel.pickUps.PickCustomerId = addressViewModel.customer.ID;
-            // addressViewModel.address.ID = addressViewModel.customer.ID;
             addressViewModel.pickUps.Cost = 50;
             addressViewModel.customer.UserName = User.Identity.Name;
             addressViewModel.customer.Email = User.Identity.Name;
@@ -106,7 +102,7 @@ namespace TrashCollector2.Controllers
             AddressViewModel addressViewModel = new AddressViewModel();
             if (id == null)
             {
-                return RedirectToAction("Create");
+                return View("Edit");
             }
             addressViewModel.customer = db.Customer.Find(id);
             addressViewModel.address = db.Address.Find(addressViewModel.customer.AddressID);
@@ -114,7 +110,8 @@ namespace TrashCollector2.Controllers
             {
                 return HttpNotFound();
             }
-            return View(addressViewModel.customer);
+            ViewBag.AddressID = new SelectList(db.Address, "Id", "Address", addressViewModel.customer.AddressID);
+            return View(addressViewModel);
         }
 
         // POST: Customers/Edit/5
@@ -122,15 +119,28 @@ namespace TrashCollector2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,FirstName,LastName,Email")] Customer customer)
+        public ActionResult Edit(AddressViewModel addressViewModel, string dayofweek)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(customer).State = EntityState.Modified;
+                addressViewModel.customer.ApplicationUserId = User.Identity.GetUserId();
+                var editCustomer = db.Customer.Where(c => c.ID == addressViewModel.customer.ID).First();
+                var editAddress = db.Address.Where(e => e.ID == addressViewModel.address.ID).Single();
+                var editPickUp = db.PickUps.Where(p => p.PickUpId == addressViewModel.customer.PickId).Single();
+                editCustomer.FirstName = addressViewModel.customer.FirstName;
+                editCustomer.LastName = addressViewModel.customer.LastName;
+                editCustomer.UserName = addressViewModel.customer.UserName;
+                editCustomer.PhoneNumber = addressViewModel.customer.PhoneNumber;
+                editAddress.Address1 = addressViewModel.address.Address1;
+                editAddress.Address2 = addressViewModel.address.Address2;
+                editAddress.City = addressViewModel.address.City;
+                editAddress.State = addressViewModel.address.State;
+                editAddress.Zipcode = addressViewModel.address.Zipcode;
+                editPickUp.DayOfWeek = dayofweek;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details");
             }
-            return View(customer);
+                return View(addressViewModel);
         }
 
         // GET: Customers/Delete/5

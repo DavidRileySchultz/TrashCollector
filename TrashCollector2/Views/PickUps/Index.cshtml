@@ -1,69 +1,90 @@
-﻿@model IEnumerable<TrashCollector2.Models.PickUps>
+﻿@model IEnumerable<TrashCollector2.Models.Customer>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
+<h2>Pick Ups</h2>
+@using System.Web.UI.WebControls
+@{var listDayOfWeek = new List<ListItem>
+{
+new ListItem { Text = "Monday", Value= "Monday" },
+new ListItem { Text = "Tuesday", Value= "Tuesday" },
+new ListItem { Text = "Wednesday", Value= "Wednesday" },
+new ListItem { Text = "Thursday", Value= "Thursday" },
+new ListItem { Text = "Friday", Value= "Friday" },
+new ListItem { Text = "Saturday", Value= "Saturday" },
+new ListItem { Text = "Sunday", Value= "Sunday" }
+};
+}
 <p>
     @Html.ActionLink("Create New", "Create")
+    Filter Pick Ups By Day
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-group">
+            @Html.Label("Day Of Week", new { @class = "col-md-2 control-label" })
+            <div class="col-md-1">
+                @Html.DropDownList("filterDay", new SelectList(listDayOfWeek, "Value", "Text"))
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Filtered" />
+                </div>
+            </div>
+        </div>
+    }
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.PickCustomerId)
+            Customer Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DayOfWeek)
+            Address
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PickUpDate)
+            Extra Pick Up Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Cost)
+            Cost of pick up
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Zipcode)
+            Day Of Regular PickUP
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SuspendPickUpStart)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SuspendPickUpEnd)
-        </th>
-        <th></th>
     </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.PickCustomerId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DayOfWeek)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PickUpDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cost)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Zipcode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SuspendPickUpStart)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SuspendPickUpEnd)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PickUpId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PickUpId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PickUpId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address.Address1)
+                @Html.DisplayFor(modelItem => item.Address.Address2)
+                @Html.DisplayFor(modelItem => item.Address.City)
+                @Html.DisplayFor(modelItem => item.Address.State)
+                @Html.DisplayFor(modelItem => item.Address.Zipcode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PickUps.PickUpDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PickUps.Cost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PickUps.DayOfWeek)
+            </td>
+            <td>
+                @Html.ActionLink("Pick up", "Delete", new { id = item.PickUps.PickUpId })
+                |
+                @Html.ActionLink("Details", "Details", "Customers", new { id = item.ID })
+            </td>
+        </tr>
+    }
 
 </table>

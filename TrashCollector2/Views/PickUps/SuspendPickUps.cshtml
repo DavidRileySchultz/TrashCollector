@@ -1,8 +1,10 @@
 ﻿@model TrashCollector2.Models.PickUps
-
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "SuspendPickUps";
 }
+
+<h2>SuspendPickUp</h2>
+
 @using System.Web.UI.WebControls;
 @{var listItems = new List<ListItem>
 {
@@ -55,34 +57,39 @@ new ListItem { Text = "30", Value= "30"}
 };
 }
 
-<h2>Schedule additional pick-up</h2>
+<h2>Set Pick Up Suspension</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h3>Cost: $50</h3>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.Label("Pick Up Date", new { @class = "col-md-2 control-label" })
+            @Html.Label("Start Of Suspend", new { @class = "col-md-2 control-label" })
             <div class="col-md-1">
-                @Html.DropDownList("Month", new SelectList(listItems, "Value", "Text"))
+                @Html.DropDownList("StartMonth", new SelectList(listItems, "Value", "Text"))
             </div>
             <div class="col-md-1">
-                @Html.DropDownList("Date", new SelectList(listDate, "Value", "Text"))
+                @Html.DropDownList("StartDate", new SelectList(listDate, "Value", "Text"))
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Start Of Suspend", new { @class = "col-md-2 control-label" })
+            <div class="col-md-1">
+                @Html.DropDownList("EndMonth", new SelectList(listItems, "Value", "Text"))
+            </div>
+            <div class="col-md-1">
+                @Html.DropDownList("EndDate", new SelectList(listDate, "Value", "Text"))
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="SuspendPickUps" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Details")
-</div>

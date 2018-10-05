@@ -18,9 +18,7 @@ namespace TrashCollector2.Controllers
         // GET: Employees
         public ActionResult Index(int? id)
         {
-            var employeeZipCode = db.Employee.Where(e => e.ID == id).Select(e => e.ZipCode).First();
-            var customersInZipCode = db.Customer.Where(c => c.Address.Zipcode == employeeZipCode);
-            return View(customersInZipCode);
+            return View(db.Employee.ToList());
         }
 
         // GET: Employees/Details/5
@@ -131,15 +129,16 @@ namespace TrashCollector2.Controllers
         {
             return View(customer);
         }
-        //public ActionResult PickUps(int id)
-        //{
-        //    var employeeZipCode = db.Employee.Where(e => e.ID == id).Select(e => e.ZipCode).First();
-        //    var customersInZipCode = db.Customer.Where(c => c.Address.Zipcode == employeeZipCode);
-        //    return View("Index", customersInZipCode);
-        //}
-        //public ActionResult ConfirmPickUps()
-        //{
-        //    return View("PickUps");
-        //}
+        public ActionResult PickUps(int id)
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var employee = db.Employee.Where(e => e.ApplicationUserId == currentUserId).FirstOrDefault();
+            var customersInZip = db.Customer.Where(z => z.Address.Zipcode == employee.ZipCode).ToList();
+            return View(customersInZip);
+        }
+        public ActionResult ConfirmPickUps()
+        {
+            return View("PickUps");
+        }
     }
 }
